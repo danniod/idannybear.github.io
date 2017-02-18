@@ -118,7 +118,7 @@
     <div class="main">
         <article>
           
-          <header class="post-header with-cover" style="background-image:url('/tech/mybatis/mybatis-datasources-conf/mybatis-superbird-small.png')" >
+          <header class="post-header">
           
           </header>
           <h1 class="post-title">MyBatis多数据源配置</h1>
@@ -138,7 +138,8 @@
           </section>
 
           <section class="post-content">
-            <p>没想到这么顺利，在项目经理指导下，没有困难的就解决了配置多数据源的问题；完成后却一致没抽出时间给大家分享，现在直接甩出干货吧：</p>
+            <p><img src="/tech/mybatis/mybatis-datasources-conf/mybatis-superbird-small.png" alt="mybatis"><br>没想到这么顺利，在项目经理指导下，没有困难的就解决了配置多数据源的问题；完成后却一致没抽出时间给大家分享，现在直接甩出干货吧：</p>
+<hr>
 <h2 id="项目背景"><a href="/tech/mybatis/mybatis-datasources-conf/#项目背景" class="headerlink" title="项目背景"></a>项目背景</h2><p>先简单的交代一下项目背景：</p>
 <ul>
 <li>MyBatis 持久层框架</li>
@@ -146,22 +147,36 @@
 <li>MySQL &amp; Oracle 数据库</li>
 </ul>
 <p>当然，数据库有多种，按照对应的数据库的使用去配置数据源参数，持久层框架和连接池也有多种，基本都是一个套路；</p>
-<h2 id="思路"><a href="/tech/mybatis/mybatis-datasources-conf/#思路" class="headerlink" title="思路"></a>思路</h2><blockquote>
-<p>复行数十步，豁然开朗</p>
-</blockquote>
-<p>之前对spring的配置文件也是一头雾水，真的是只有经过一番实战，才会豁然开朗。（这些都是废话）</p>
-<p>这个思路嘛，先想想单个数据源的配置：</p>
+<hr>
+<h2 id="思路"><a href="/tech/mybatis/mybatis-datasources-conf/#思路" class="headerlink" title="思路"></a>思路</h2><p>这个思路嘛，先想想单个数据源的配置：</p>
 <ol>
 <li>配置jdbc需要的<code>driver</code>、<code>url</code>、<code>user</code>、<code>password</code>参数</li>
 <li>配置sessionFactory，使用C3P0中间配置dataSource</li>
 <li>使用spring整合注入</li>
 </ol>
+<p>简单点：<br><code>db -&gt; dataSource -&gt; sessionFactory -&gt; spring注入</code></p>
 <p>多数据源重复前两个步骤，然后整合注入，so easy 不是么！</p>
-<h2 id="具体实现"><a href="/tech/mybatis/mybatis-datasources-conf/#具体实现" class="headerlink" title="具体实现"></a>具体实现</h2><h3 id="数据库参数"><a href="/tech/mybatis/mybatis-datasources-conf/#数据库参数" class="headerlink" title="数据库参数"></a>数据库参数</h3><p>便于配置数据库，将参数配置到properties文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">jdbc.driverClassName=com.mysql.jdbc.Driver</div><div class="line">jdbc.url=jdbc:mysql://127.0.0.1:3306/db</div><div class="line">jdbc.user=user</div><div class="line">jdbc.password=password</div></pre></td></tr></table></figure></p>
-<h3 id="C3P0连接池"><a href="/tech/mybatis/mybatis-datasources-conf/#C3P0连接池" class="headerlink" title="C3P0连接池"></a>C3P0连接池</h3><p>接下来都是配置spring的配置文件（篇幅有限，仅贴部分关键配置）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">   &lt;!-- 引入数据库参数properties的参数 --&gt;</div><div class="line">   &lt;context:property-placeholder location=&quot;classpath:db.properties&quot; ignore-unresolvable=&quot;true&quot;/&gt;</div><div class="line"></div><div class="line">   &lt;bean id=&quot;dataSource&quot; class=&quot;com.mchange.v2.c3p0.ComboPooledDataSource&quot;&gt;</div><div class="line">       &lt;property name=&quot;driverClass&quot; value=&quot;$&#123;jdbc.driverClassName&#125;&quot;/&gt;</div><div class="line">       &lt;property name=&quot;jdbcUrl&quot; value=&quot;$&#123;jdbc.url&#125;&quot;/&gt;</div><div class="line">       &lt;property name=&quot;user&quot; value=&quot;$&#123;jdbc.user&#125;&quot;/&gt;</div><div class="line">&lt;property name=&quot;password&quot; value=&quot;$&#123;jdbc.password&#125;</div><div class="line">&lt;!-- c3p0连接池的私有属性 --&gt;</div><div class="line">···</div><div class="line">   &lt;/bean&gt;</div></pre></td></tr></table></figure>
-<h3 id="sessionFactory"><a href="/tech/mybatis/mybatis-datasources-conf/#sessionFactory" class="headerlink" title="sessionFactory"></a>sessionFactory</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;sqlSessionFactory&quot; class=&quot;org.mybatis.spring.SqlSessionFactoryBean&quot;&gt;</div><div class="line">    &lt;!-- 注入数据库连接池 --&gt;</div><div class="line">    &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot;/&gt;</div><div class="line">    &lt;!-- 配置MyBatis全局配置文件:mybatis-config.xml --&gt;</div><div class="line">    &lt;property name=&quot;configLocation&quot; value=&quot;classpath:mybatis-config.xml&quot;/&gt;</div><div class="line">    &lt;!-- 扫描entity包 使用别名 --&gt;</div><div class="line">    &lt;property name=&quot;typeAliasesPackage&quot; value=&quot;com.asiainfo.dao.entity&quot;/&gt;</div><div class="line">    &lt;!-- 扫描sql配置文件:mapper需要的xml文件 --&gt;</div><div class="line">    &lt;property name=&quot;mapperLocations&quot; value=&quot;classpath:path/to/mapper/*.xml&quot;/&gt;</div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure>
-<h3 id="注入"><a href="/tech/mybatis/mybatis-datasources-conf/#注入" class="headerlink" title="注入"></a>注入</h3><p>注入到哪里呢？当然是用的地方；观察下面的配置：bean不需要指定id了，但是要指明mapper接口的包，所以它是根据哪个包下的接口（实现类根据xml字段注入）使用指定的数据源。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;bean class=&quot;org.mybatis.spring.mapper.MapperScannerConfigurer&quot;&gt;</div><div class="line">    &lt;!-- 注入sqlSessionFactory --&gt;</div><div class="line">    &lt;property name=&quot;sqlSessionFactoryBeanName&quot; value=&quot;sqlSessionFactory&quot;/&gt;</div><div class="line">    &lt;!-- 给出需要扫描Dao接口包 --&gt;</div><div class="line">    &lt;property name=&quot;basePackage&quot; value=&quot;com.asiainfo.dao&quot;/&gt;</div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>复行数十步，豁然开朗</p>
+</blockquote>
+<p>之前对spring的配置文件也是一头雾水，真的是只有经过一番实战，才会豁然开朗。</p>
+<hr>
+<h2 id="具体实现"><a href="/tech/mybatis/mybatis-datasources-conf/#具体实现" class="headerlink" title="具体实现"></a>具体实现</h2><h3 id="数据库参数"><a href="/tech/mybatis/mybatis-datasources-conf/#数据库参数" class="headerlink" title="数据库参数"></a>数据库参数</h3><p>便于配置数据库，将参数配置到<code>properties</code>文件（准备多套）<br>db-mysql.properties<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mysql.jdbc.driver=com.mysql.jdbc.Driver</div><div class="line">mysql.jdbc.url=jdbc:mysql://127.0.0.1:3306/mysql</div><div class="line">mysql.jdbc.user=user</div><div class="line">mysql.jdbc.password=password</div></pre></td></tr></table></figure></p>
+<p>db-orcl.properties<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">orcl.jdbc.driver=oracle.jdbc.driver.OracleDriver</div><div class="line">orcl.jdbc.url=jdbc:oracle:thin:@192.168.1.2:1521:orcl</div><div class="line">orcl.jdbc.user=user</div><div class="line">orcl.jdbc.password=passwd</div></pre></td></tr></table></figure></p>
+<p>注意：键值对的<code>key</code>不要重复</p>
+<h3 id="C3P0连接池"><a href="/tech/mybatis/mybatis-datasources-conf/#C3P0连接池" class="headerlink" title="C3P0连接池"></a>C3P0连接池</h3><p>接下来都是配置<code>spring</code>的配置文件（篇幅有限，仅贴部分关键配置）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&lt;!-- 引入数据库参数properties的参数 --&gt;</div><div class="line">&lt;context:property-placeholder location=&quot;classpath:db-mysql.properties&quot; ignore-unresolvable=&quot;true&quot;/&gt;</div><div class="line"></div><div class="line">&lt;bean id=&quot;mysqlDataSource&quot; class=&quot;com.mchange.v2.c3p0.ComboPooledDataSource&quot;&gt;</div><div class="line">    &lt;property name=&quot;driverClass&quot; value=&quot;$&#123;mysql.jdbc.driver&#125;&quot;/&gt;</div><div class="line">    &lt;property name=&quot;jdbcUrl&quot; value=&quot;$&#123;mysql.jdbc.url&#125;&quot;/&gt;</div><div class="line">    &lt;property name=&quot;user&quot; value=&quot;$&#123;mysql.jdbc.user&#125;&quot;/&gt;</div><div class="line">    &lt;property name=&quot;password&quot; value=&quot;$&#123;mysql.jdbc.password&#125;</div><div class="line">    &lt;!-- c3p0连接池的私有属性 --&gt;</div><div class="line">    ···</div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>4·2·3·4·再 来 一 次！</p>
+</blockquote>
+<p>引入<code>db-orcl.properties</code>，重复工作配置<code>orclDataSource</code></p>
+<h3 id="sessionFactory"><a href="/tech/mybatis/mybatis-datasources-conf/#sessionFactory" class="headerlink" title="sessionFactory"></a>sessionFactory</h3><p><code>session</code>是jdbc与数据库通话的连接会话，不同的数据源配置对应的<code>sessionFactory</code>工厂;<br>注意：entity根据包的路径来区分使用不同的session;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;sqlSessionFactory&quot; class=&quot;org.mybatis.spring.SqlSessionFactoryBean&quot;&gt;</div><div class="line">    &lt;!-- 注入数据库连接池 --&gt;</div><div class="line">    &lt;property name=&quot;dataSource&quot; ref=&quot;mysqlDataSource&quot;/&gt;</div><div class="line">    &lt;!-- 配置MyBatis全局配置文件:mybatis-config.xml --&gt;</div><div class="line">    &lt;property name=&quot;configLocation&quot; value=&quot;classpath:mybatis-config.xml&quot;/&gt;</div><div class="line">    &lt;!-- 扫描entity包 使用别名 --&gt;</div><div class="line">    &lt;property name=&quot;typeAliasesPackage&quot; value=&quot;com.asiainfo.dao.entity&quot;/&gt;</div><div class="line">    &lt;!-- 扫描sql配置文件:mapper需要的xml文件 --&gt;</div><div class="line">    &lt;property name=&quot;mapperLocations&quot; value=&quot;classpath:path/to/mapper/*.xml&quot;/&gt;</div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">   &lt;bean id=&quot;orclSessionFactory&quot; ...</div><div class="line">       &lt;property name=&quot;dataSource&quot; ref=&quot;orclDataSource&quot;/&gt;</div><div class="line">...</div><div class="line">   &lt;/bean&gt;</div></pre></td></tr></table></figure>
+<h3 id="注入"><a href="/tech/mybatis/mybatis-datasources-conf/#注入" class="headerlink" title="注入"></a>注入</h3><p>注入到哪里呢？当然是用的地方——DAO层；<br>观察下面的配置：bean不需要指定id了，但是要指明不同的mapper接口包，所以它是根据哪个包下的接口（实现类根据xml字段注入）使用指定的<code>sessionFactory</code>;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;bean class=&quot;org.mybatis.spring.mapper.MapperScannerConfigurer&quot;&gt;</div><div class="line">    &lt;!-- 注入sqlSessionFactory --&gt;</div><div class="line">    &lt;property name=&quot;sqlSessionFactoryBeanName&quot; value=&quot;sqlSessionFactory&quot;/&gt;</div><div class="line">    &lt;!-- 给出需要扫描Dao接口包 --&gt;</div><div class="line">    &lt;property name=&quot;basePackage&quot; value=&quot;com.asiainfo.dao&quot;/&gt;</div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;bean ...&gt;</div><div class="line">    &lt;property name=&quot;sqlSessionFactoryBeanName&quot; value=&quot;orclSessionFactory&quot;/&gt;</div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure>
+<hr>
+<p>好的，到这里已经配置完了多数据源。</p>
 
           </section>
         </article>
