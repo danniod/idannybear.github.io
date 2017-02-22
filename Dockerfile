@@ -5,7 +5,7 @@ ADD ./rootfs.tar /
 RUN mkdir -p /app
 WORKDIR /app
 COPY ./static /app/
-RUN git clone git://gitcafe.com/lijianying12/lijianying12.git /public
-EXPOSE 8080
+RUN git clone git@github.com:idannybear/idannybear.github.io.git /public
+EXPOSE 80
 
 CMD ["/app/static"]
