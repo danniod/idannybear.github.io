@@ -182,6 +182,119 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-maven-learning" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/uncategorized/maven-learning/">Maven 核心</a>
+    </h1>
+  
+
+        
+        <a href="/uncategorized/maven-learning/" class="archive-article-date">
+  	<time datetime="2017-03-13T09:20:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="生命周期（Lifecycle）"><a href="#生命周期（Lifecycle）" class="headerlink" title="生命周期（Lifecycle）"></a>生命周期（Lifecycle）</h2><blockquote>
+<p>生命周期是一组<code>阶段</code>的序列（sequence of phases）每个阶段定义了目标被执行的顺序。</p>
+</blockquote>
+<p>这里的阶段是生命周期的一部分。</p>
+<p>Maven有三个标准的生命周期，分别是<code>clean</code>, <code>default</code>, <code>site</code>; 它们是相互独立的</p>
+<h2 id="依赖-amp-传递"><a href="#依赖-amp-传递" class="headerlink" title="依赖 &amp; 传递"></a>依赖 &amp; 传递</h2><h3 id="依赖范围（Scepe）"><a href="#依赖范围（Scepe）" class="headerlink" title="依赖范围（Scepe）"></a>依赖范围（Scepe）</h3><p>compile (default)<br>test<br>runtime<br>provided<br>system<br>import</p>
+<h3 id="依赖传递"><a href="#依赖传递" class="headerlink" title="依赖传递"></a>依赖传递</h3><table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">compile</th>
+<th style="text-align:center">test</th>
+<th style="text-align:center">provided</th>
+<th style="text-align:center">runtime</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">compile</td>
+<td style="text-align:center">compile</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">runtime</td>
+</tr>
+<tr>
+<td style="text-align:center">test</td>
+<td style="text-align:center">test</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">test</td>
+</tr>
+<tr>
+<td style="text-align:center">provided</td>
+<td style="text-align:center">provided</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">provided</td>
+</tr>
+<tr>
+<td style="text-align:center">runtime</td>
+<td style="text-align:center">runtime</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">runtime</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Note: 博主浏览到国内许多博客还存在providid-provided的传递</p>
+<h3 id="仲裁机制"><a href="#仲裁机制" class="headerlink" title="仲裁机制"></a>仲裁机制</h3></blockquote>
+<p>在工程中显式或隐式声明引用的artifactId和groupId相同而version不同。即引入包冲突。Maven为避免冲突，启用仲裁机制，将重复的包仅引用一个。</p>
+<p>那到底引用哪一个呢？</p>
+<ul>
+<li>保留依赖路径短的</li>
+</ul>
+<p>eg.<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">projectA -&gt; projectB -&gt; projectD(X:2.1)</div><div class="line">projectA -&gt; projectC(X:2.0)</div></pre></td></tr></table></figure></p>
+<p>X-表示某groupId:artifactId  仲裁掉X的<code>2.1</code>版本，保留<code>2.0</code>版本</p>
+<ul>
+<li>依赖路径长度相同，保留声明顺序早的</li>
+</ul>
+<p>eg.<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">projectA -&gt; projectB -&gt; projectD(X:2.1)</div><div class="line">projectA -&gt; projectC -&gt; projectE(X:2.0)</div></pre></td></tr></table></figure></p>
+<p>则仲裁掉X <code>2.0</code>版本，保留<code>2.1</code>版本</p>
+<h4 id="填坑指南"><a href="#填坑指南" class="headerlink" title="填坑指南"></a>填坑指南</h4><p>在运行中抛出<code>ClassNotFoundException</code>并确定该类的依赖包已引用，可考虑依赖所需的版本是否被仲裁掉了。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/uncategorized/maven-learning/">阅读全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-mybatis-datasources-conf" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -202,7 +315,7 @@ var _hmt = _hmt || [];
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><img src="mybatis-superbird-small.png" alt="mybatis"><br>没想到这么顺利，在项目经理指导下，没有困难的就解决了配置多数据源的问题；完成后却一致没抽出时间给大家分享，现在直接甩出干货吧：</p>
+        <p><img src="http://omqkniyki.bkt.clouddn.com/image/mybatis-superbird.png" alt="mybatis" title="mybatis superbird"><br>没想到这么顺利，在项目经理指导下，没有困难的就解决了配置多数据源的问题；完成后却一致没抽出时间给大家分享，现在直接甩出干货吧：</p>
 <h2 id=""><a href="#" class="headerlink" title=""></a>
         
           <a class="article-more-a" href="/tech/mybatis/mybatis-datasources-conf/#more">more >></a>
@@ -441,7 +554,7 @@ var _hmt = _hmt || [];
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><img src="hexo-io.png" alt="hexo.io"></p>
+        <p><img src="http://omqkniyki.bkt.clouddn.com/image/hexo-io.png" alt="hexo.io" title="hexo framework"></p>
 <blockquote>
 <p>生命不止，折腾不息！</p>
 </blockquote>
@@ -613,15 +726,15 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">summary</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">MyBatis</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">多数据源</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">summary</a>
               </li>
             
             <div class="clearfix"></div>

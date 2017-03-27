@@ -6,14 +6,33 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://dannybear.top">
-  <title>Tag: 多数据源 | dannybear&#39;s Blog</title>
+  <title>Maven 核心 | dannybear&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="dannybear's Blog">
-<meta property="og:url" content="http://dannybear.top/tags/多数据源/index.html">
+  <meta name="description" content="生命周期（Lifecycle）
+生命周期是一组阶段的序列（sequence of phases）每个阶段定义了目标被执行的顺序。
+
+这里的阶段是生命周期的一部分。
+Maven有三个标准的生命周期，分别是clean, default, site; 它们是相互独立的
+依赖 &amp;amp; 传递依赖范围（Scepe）compile (default)testruntimeprovidedsystemimpo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Maven 核心">
+<meta property="og:url" content="http://dannybear.top/uncategorized/maven-learning/index.html">
 <meta property="og:site_name" content="dannybear's Blog">
+<meta property="og:description" content="生命周期（Lifecycle）
+生命周期是一组阶段的序列（sequence of phases）每个阶段定义了目标被执行的顺序。
+
+这里的阶段是生命周期的一部分。
+Maven有三个标准的生命周期，分别是clean, default, site; 它们是相互独立的
+依赖 &amp;amp; 传递依赖范围（Scepe）compile (default)testruntimeprovidedsystemimpo">
+<meta property="og:updated_time" content="2017-03-27T09:24:56.999Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="dannybear's Blog">
+<meta name="twitter:title" content="Maven 核心">
+<meta name="twitter:description" content="生命周期（Lifecycle）
+生命周期是一组阶段的序列（sequence of phases）每个阶段定义了目标被执行的顺序。
+
+这里的阶段是生命周期的一部分。
+Maven有三个标准的生命周期，分别是clean, default, site; 它们是相互独立的
+依赖 &amp;amp; 传递依赖范围（Scepe）compile (default)testruntimeprovidedsystemimpo">
   
     <link rel="alternative" href="/atom.xml" title="dannybear&#39;s Blog" type="application/atom+xml">
   
@@ -180,79 +199,195 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-maven-learning" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/tech/mybatis/mybatis-datasources-conf/" class="archive-article-date">
-  	<time datetime="2017-02-17T11:02:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-02-17</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/tech/mybatis/mybatis-datasources-conf/">MyBatis多数据源配置</a>
+    <h1 class="article-title" itemprop="name">
+      Maven 核心
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">MyBatis</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">多数据源</a>
-        		</li>
-      		
-		</ul>
-	</div>
+        
+        <a href="/uncategorized/maven-learning/" class="archive-article-date">
+  	<time datetime="2017-03-13T09:20:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="生命周期（Lifecycle）"><a href="#生命周期（Lifecycle）" class="headerlink" title="生命周期（Lifecycle）"></a>生命周期（Lifecycle）</h2><blockquote>
+<p>生命周期是一组<code>阶段</code>的序列（sequence of phases）每个阶段定义了目标被执行的顺序。</p>
+</blockquote>
+<p>这里的阶段是生命周期的一部分。</p>
+<p>Maven有三个标准的生命周期，分别是<code>clean</code>, <code>default</code>, <code>site</code>; 它们是相互独立的</p>
+<h2 id="依赖-amp-传递"><a href="#依赖-amp-传递" class="headerlink" title="依赖 &amp; 传递"></a>依赖 &amp; 传递</h2><h3 id="依赖范围（Scepe）"><a href="#依赖范围（Scepe）" class="headerlink" title="依赖范围（Scepe）"></a>依赖范围（Scepe）</h3><p>compile (default)<br>test<br>runtime<br>provided<br>system<br>import</p>
+<h3 id="依赖传递"><a href="#依赖传递" class="headerlink" title="依赖传递"></a>依赖传递</h3><table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">compile</th>
+<th style="text-align:center">test</th>
+<th style="text-align:center">provided</th>
+<th style="text-align:center">runtime</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">compile</td>
+<td style="text-align:center">compile</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">runtime</td>
+</tr>
+<tr>
+<td style="text-align:center">test</td>
+<td style="text-align:center">test</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">test</td>
+</tr>
+<tr>
+<td style="text-align:center">provided</td>
+<td style="text-align:center">provided</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">provided</td>
+</tr>
+<tr>
+<td style="text-align:center">runtime</td>
+<td style="text-align:center">runtime</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">runtime</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Note: 博主浏览到国内许多博客还存在providid-provided的传递</p>
+<h3 id="仲裁机制"><a href="#仲裁机制" class="headerlink" title="仲裁机制"></a>仲裁机制</h3></blockquote>
+<p>在工程中显式或隐式声明引用的artifactId和groupId相同而version不同。即引入包冲突。Maven为避免冲突，启用仲裁机制，将重复的包仅引用一个。</p>
+<p>那到底引用哪一个呢？</p>
+<ul>
+<li>保留依赖路径短的</li>
+</ul>
+<p>eg.<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">projectA -&gt; projectB -&gt; projectD(X:2.1)</div><div class="line">projectA -&gt; projectC(X:2.0)</div></pre></td></tr></table></figure></p>
+<p>X-表示某groupId:artifactId  仲裁掉X的<code>2.1</code>版本，保留<code>2.0</code>版本</p>
+<ul>
+<li>依赖路径长度相同，保留声明顺序早的</li>
+</ul>
+<p>eg.<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">projectA -&gt; projectB -&gt; projectD(X:2.1)</div><div class="line">projectA -&gt; projectC -&gt; projectE(X:2.0)</div></pre></td></tr></table></figure></p>
+<p>则仲裁掉X <code>2.0</code>版本，保留<code>2.1</code>版本</p>
+<h4 id="填坑指南"><a href="#填坑指南" class="headerlink" title="填坑指南"></a>填坑指南</h4><p>在运行中抛出<code>ClassNotFoundException</code>并确定该类的依赖包已引用，可考虑依赖所需的版本是否被仲裁掉了。</p>
 
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/tech/" class="article-tag-list-link color5">tech</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/mybatis/" class="article-tag-list-link color3">mybatis</a>
-        		</li>
-      		
-		</ul>
-	</div>
+      
 
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://dannybear.top/uncategorized/maven-learning/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/tech/mybatis/mybatis-datasources-conf/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">MyBatis多数据源配置</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+  
+    <div class="duoshuo"></div>
   
 
-    
+
+
+<section id="comments">
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'dannybearr'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
 
 
           </div>
@@ -275,9 +410,9 @@ var _hmt = _hmt || [];
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		root: "/",
