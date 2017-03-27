@@ -20,7 +20,7 @@
 生命周期是一组阶段的序列（sequence of phases）每个阶段定义了目标被执行的顺序。
 
 这里的阶段是生命周期的一部分。">
-<meta property="og:updated_time" content="2017-03-27T09:39:39.170Z">
+<meta property="og:updated_time" content="2017-03-27T11:27:28.700Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Maven 核心">
 <meta name="twitter:description" content="生命周期（Lifecycle）
@@ -219,6 +219,97 @@ var _hmt = _hmt || [];
 <p>这里的阶段是生命周期的一部分。</p>
 <a id="more"></a>
 <p>Maven有三个标准的生命周期，分别是<code>clean</code>, <code>default</code>, <code>site</code>; 它们是相互独立的</p>
+<h3 id="clean-生命周期"><a href="#clean-生命周期" class="headerlink" title="clean 生命周期"></a>clean 生命周期</h3><table>
+<thead>
+<tr>
+<th style="text-align:center">phase</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">pre-clean</td>
+<td>在此阶段执行实际项目清除之前所需的操作</td>
+</tr>
+<tr>
+<td style="text-align:center">clean</td>
+<td>删除之前构建生成的所有文件，默认工程下的target目录</td>
+</tr>
+<tr>
+<td style="text-align:center">post-clean</td>
+<td>在此阶段执行实际项目清除之后所需的操作</td>
+</tr>
+</tbody>
+</table>
+<h3 id="default-生命周期"><a href="#default-生命周期" class="headerlink" title="default 生命周期"></a>default 生命周期</h3><blockquote>
+<p>还有一个说法叫做 <code>build</code>，许多博客上这么称呼，但官方文档里并未如此声明。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">phase</th>
+<th style="text-align:center">阶段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">process-resources</td>
+<td style="text-align:center">处理资源</td>
+<td>将资源复制并处理到目标目录中，准备打包</td>
+</tr>
+<tr>
+<td style="text-align:center">compile</td>
+<td style="text-align:center">编译</td>
+<td>编译项目源代码</td>
+</tr>
+<tr>
+<td style="text-align:center">test</td>
+<td style="text-align:center">测试</td>
+<td>运行单元测试对编译后的代码进行测试</td>
+</tr>
+<tr>
+<td style="text-align:center">package</td>
+<td style="text-align:center">打包</td>
+<td>将编译的文件分格式（jar/war等）打包，默认输出至target目录</td>
+</tr>
+<tr>
+<td style="text-align:center">install</td>
+<td style="text-align:center">安装</td>
+<td>将软件包安装到本地仓库中，作为其他项目依赖</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>这里仅描述了常见常用的几个阶段，所有周期请<a href="http://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html#Lifecycle_Reference" title="生命周期" target="_blank" rel="external">参见官方文档</a></p>
+</blockquote>
+<h3 id="site-生命周期"><a href="#site-生命周期" class="headerlink" title="site 生命周期"></a>site 生命周期</h3><table>
+<thead>
+<tr>
+<th style="text-align:center">phase</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">pre-site</td>
+<td>在此阶段执行实际站点生成之前所需的操作</td>
+</tr>
+<tr>
+<td style="text-align:center">site</td>
+<td>生成项目的站点文件</td>
+</tr>
+<tr>
+<td style="text-align:center">post-site</td>
+<td>在此阶段执行实际站点生成之前所需的操作</td>
+</tr>
+<tr>
+<td style="text-align:center">site-deploy</td>
+<td>将生成的站点文件部署到指定服务器</td>
+</tr>
+</tbody>
+</table>
+<h2 id="目标（Gold）"><a href="#目标（Gold）" class="headerlink" title="目标（Gold）"></a>目标（Gold）</h2><hr>
 <h2 id="依赖-amp-传递"><a href="#依赖-amp-传递" class="headerlink" title="依赖 &amp; 传递"></a>依赖 &amp; 传递</h2><h3 id="依赖范围（Scepe）"><a href="#依赖范围（Scepe）" class="headerlink" title="依赖范围（Scepe）"></a>依赖范围（Scepe）</h3><p>compile (default)<br>test<br>runtime<br>provided<br>system<br>import</p>
 <h3 id="依赖传递"><a href="#依赖传递" class="headerlink" title="依赖传递"></a>依赖传递</h3><table>
 <thead>
@@ -277,6 +368,7 @@ var _hmt = _hmt || [];
 <p>eg.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">projectA -&gt; projectB -&gt; projectD(X:2.1)</div><div class="line">projectA -&gt; projectC -&gt; projectE(X:2.0)</div></pre></td></tr></table></figure></p>
 <p>则仲裁掉X <code>2.0</code>版本，保留<code>2.1</code>版本</p>
 <h4 id="填坑指南"><a href="#填坑指南" class="headerlink" title="填坑指南"></a>填坑指南</h4><p>在运行中抛出<code>ClassNotFoundException</code>并确定该类的依赖包已引用，可考虑依赖所需的版本是否被仲裁掉了。</p>
+<hr>
 
       
 
