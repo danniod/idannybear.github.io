@@ -20,7 +20,7 @@
 生命周期是一组阶段的序列（sequence of phases）每个阶段定义了目标被执行的顺序。
 
 这里的阶段是生命周期的一部分。">
-<meta property="og:updated_time" content="2017-03-27T14:48:07.588Z">
+<meta property="og:updated_time" content="2017-04-06T03:48:04.689Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Maven 核心">
 <meta name="twitter:description" content="生命周期（Lifecycle）
@@ -281,7 +281,7 @@ var _hmt = _hmt || [];
 </tbody>
 </table>
 <blockquote>
-<p>这里仅描述了常见常用的几个阶段，所有周期请<a href="http://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html#Lifecycle_Reference" title="生命周期" target="_blank" rel="external">参见官方文档</a></p>
+<p>这里仅描述了常见常用的几个阶段，所有周期请<a href="http://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html#Lifecycle_Reference" title="生命周期" target="_blank" rel="external">参见官方文档-Lifecycle</a></p>
 </blockquote>
 <h3 id="site"><a href="#site" class="headerlink" title="site"></a>site</h3><table>
 <thead>
@@ -309,8 +309,60 @@ var _hmt = _hmt || [];
 </tr>
 </tbody>
 </table>
-<h2 id="目标（Gold）"><a href="#目标（Gold）" class="headerlink" title="目标（Gold）"></a>目标（Gold）</h2><hr>
-<h2 id="依赖-amp-传递"><a href="#依赖-amp-传递" class="headerlink" title="依赖 &amp; 传递"></a>依赖 &amp; 传递</h2><h3 id="依赖范围（Scepe）"><a href="#依赖范围（Scepe）" class="headerlink" title="依赖范围（Scepe）"></a>依赖范围（Scepe）</h3><p>compile (default)<br>test<br>runtime<br>provided<br>system<br>import</p>
+<p>eg.:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mvn clean dependency:copy-dependencies package</div></pre></td></tr></table></figure></p>
+<p>这里的<code>clean</code>阶段将会被首先执行，然后<code>dependency:copy-dependencies</code>目标会被执行，最终<code>package</code>阶段被执行。</p>
+<blockquote>
+<p>Note: 只有该阶段之前及包括该阶段在内的所有阶段会被执行</p>
+</blockquote>
+<hr>
+<h2 id="目标（Gold）"><a href="#目标（Gold）" class="headerlink" title="目标（Gold）"></a>目标（Gold）</h2><blockquote>
+<p><code>目标</code>表示一个特定的、对构建和管理工程有帮助的任务。</p>
+</blockquote>
+<p>目标可绑定在构建阶段执行，经过阶段便自动执行。构建阶段可绑定0个到多个；没有绑定任何构建阶段的目标可以在构建生命周期之外被直接调用执。</p>
+<hr>
+<h2 id="依赖-amp-传递"><a href="#依赖-amp-传递" class="headerlink" title="依赖 &amp; 传递"></a>依赖 &amp; 传递</h2><h3 id="依赖范围（Scepe）"><a href="#依赖范围（Scepe）" class="headerlink" title="依赖范围（Scepe）"></a>依赖范围（Scepe）</h3><blockquote>
+<p><code>依赖范围</code>用于限制依赖关系的传递性，并影响用于各种构建任务的classpath。</p>
+</blockquote>
+<p>在这之前先来了解一下Maven构建任务时不同阶段使用不同的classpath:</p>
+<ul>
+<li>compile classpath</li>
+<li>test classpath</li>
+<li>runtime classpath</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Scope</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">compile (default)</td>
+<td style="text-align:left">在所有classpath中使用，并传递依赖关系到依赖项目，默认范围</td>
+</tr>
+<tr>
+<td style="text-align:center">test</td>
+<td style="text-align:left">正常使用应用程序不需要依赖关系，仅用于测试的编译和运行阶段，不可传递</td>
+</tr>
+<tr>
+<td style="text-align:center">runtime</td>
+<td style="text-align:left">它是在运行时和测试classpath使用</td>
+</tr>
+<tr>
+<td style="text-align:center">provided</td>
+<td style="text-align:left">表明你期望JDK或一个容器在运行时提供依赖，仅适用于编译和测试classpath，不可传递</td>
+</tr>
+<tr>
+<td style="text-align:center">system</td>
+<td style="text-align:left">与provided类似，必须提供明确指定本地jar路径，而不是在仓库中查找</td>
+</tr>
+<tr>
+<td style="text-align:center">import</td>
+<td style="text-align:left">Maven 2.0.9版本以上，仅支持在<code>&lt;dependencyManagement&gt;</code>部分。替换为指定POM的依赖管理中依赖关系，不参与传递性</td>
+</tr>
+</tbody>
+</table>
 <h3 id="依赖传递"><a href="#依赖传递" class="headerlink" title="依赖传递"></a>依赖传递</h3><table>
 <thead>
 <tr>
@@ -353,21 +405,32 @@ var _hmt = _hmt || [];
 </tbody>
 </table>
 <blockquote>
-<p>Note: 博主浏览到国内许多博客还存在providid-provided的传递</p>
+<p>Note: 博主浏览到国内许多博客还存在p rovidid-provided的传递，难道是曾经支持？现在Maven2、3的官文“This scope is only available on the compilation and test classpath, and is not transitive.”指出不可传递！详见<a href="https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Scope" title="依赖范围" target="_blank" rel="external">官方文档-Dependency Scope</a></p>
 </blockquote>
+<h3 id="可选与排除"><a href="#可选与排除" class="headerlink" title="可选与排除"></a>可选与排除</h3><p>使用<code>&lt;optional&gt;</code>指定依赖为可选，取消传递性，不再传递该依赖。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">denpendcy</span>&gt;</span></div><div class="line">    ...gruopId artifactId version</div><div class="line">    <span class="tag">&lt;<span class="name">optional</span>&gt;</span>true<span class="tag">&lt;/<span class="name">optional</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">denpendcy</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>使用<code>&lt;exclusions&gt;</code>排除依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">denpendcy</span>&gt;</span></div><div class="line">    ...gruopId artifactId version</div><div class="line">    <span class="tag">&lt;<span class="name">exclusions</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">exclusion</span>&gt;</span></div><div class="line">            <span class="comment">&lt;!-- 要排除的依赖 --&gt;</span></div><div class="line">            ...gruopId artifactId</div><div class="line">        <span class="tag">&lt;/<span class="name">exclusion</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">exclusions</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">denpendcy</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>通过配置可选或排除，可避免因依赖冲突触发仲裁需要的包带来的问题。</p>
 <h3 id="仲裁机制"><a href="#仲裁机制" class="headerlink" title="仲裁机制"></a>仲裁机制</h3><p>在工程中显式或隐式声明引用的artifactId和groupId相同而version不同。即引入包冲突。Maven为避免冲突，启用仲裁机制，将重复的包仅引用一个。</p>
+<blockquote>
 <p>那到底引用哪一个呢？</p>
+</blockquote>
 <ul>
 <li>保留依赖路径短的</li>
 </ul>
-<p>eg.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">projectA -&gt; projectB -&gt; projectD(X:2.1)</div><div class="line">projectA -&gt; projectC(X:2.0)</div></pre></td></tr></table></figure></p>
+<p>eg.（默认compile范围）:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">projectA -&gt; projectB -&gt; projectD(X:2.1)</div><div class="line">projectA -&gt; projectC(X:2.0)</div></pre></td></tr></table></figure></p>
 <p>X-表示某groupId:artifactId  仲裁掉X的<code>2.1</code>版本，保留<code>2.0</code>版本</p>
 <ul>
 <li>依赖路径长度相同，保留声明顺序早的</li>
 </ul>
-<p>eg.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">projectA -&gt; projectB -&gt; projectD(X:2.1)</div><div class="line">projectA -&gt; projectC -&gt; projectE(X:2.0)</div></pre></td></tr></table></figure></p>
+<p>eg.:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">projectA -&gt; projectB -&gt; projectD(X:2.1)</div><div class="line">projectA -&gt; projectC -&gt; projectE(X:2.0)</div></pre></td></tr></table></figure></p>
 <p>则仲裁掉X <code>2.0</code>版本，保留<code>2.1</code>版本</p>
 <h4 id="填坑指南"><a href="#填坑指南" class="headerlink" title="填坑指南"></a>填坑指南</h4><p>在运行中抛出<code>ClassNotFoundException</code>并确定该类的依赖包已引用，可考虑依赖所需的版本是否被仲裁掉了。</p>
+<hr>
+<blockquote>
+<p>参考：<br>[1]  <a href="http://tangyanbo.iteye.com/blog/1503957" target="_blank" rel="external">Maven实战（六）依赖</a></p>
+</blockquote>
 <hr>
 
       
